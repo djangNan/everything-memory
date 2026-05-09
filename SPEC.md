@@ -88,7 +88,7 @@ Build a deployed full-stack service where:
   `[2026-05-09T14:22Z] mockple: viewed product "iPhone 15 Pro" (category: phones, price: $1199)`
 - That markdown doc is registered/refreshed in Nia (Nia Sync daemon or direct upload via Nia API).
 - Profile-query endpoint translates a natural-language question into a Nia search over that user's document, returning a synthesized answer + source events.
-- **Fallback if Nia indexing latency is too high:** assemble the user's event log inline and pass it as context to a single OpenAI GPT-5.5 call from the edge function. (Decided at build time depending on Nia daemon availability.)
+- **Fallback if Nia indexing latency is too high:** assemble the user's event log inline and pass it as context to a single InsForge AI Gateway call (`anthropic/claude-3.5-haiku`) from the edge function. (Decided at build time depending on Nia daemon availability.)
 
 ## Public API
 
@@ -138,7 +138,7 @@ EM.setDemographics({ gender: 'M', ageBand: '25-34' });
 | Demo sites | **Next.js on Vercel** | Vercel sponsor; cheap free deploy; fastest to ship |
 | Admin dashboard | **Next.js on Vercel** (separate route) | same project |
 | Script lib | **Vanilla TS, ~3KB** built with `tsup` | Zero deps, embeddable everywhere |
-| LLM (NL query synth) | **OpenAI GPT-5.5** | Per team decision |
+| LLM (NL query synth) | **InsForge AI Gateway** (`anthropic/claude-3.5-haiku`) | One key (InsForge); credits billed via InsForge AI pool |
 
 ## Risks
 | Risk | Mitigation |
