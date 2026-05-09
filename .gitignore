@@ -20,6 +20,9 @@ out/
 dist/
 build/
 
+# Vercel CLI per-app project link
+.vercel/
+
 # Misc
 .DS_Store
 *.log
