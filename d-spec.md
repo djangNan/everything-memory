@@ -32,13 +32,14 @@ db/migrations/         # SQL schema
 ### D0.2 — Nia 계정 + 키
 - app.trynia.ai 가입 → Billing → 프로모코드 `NIAHACK`
 - API key 캡처
-- **결정:** Nia 인덱싱 모드 — Sync daemon vs 직접 업로드 API 중 더 빠른 쪽. 5분 안에 결정 못 하면 **inline LLM fallback**으로 즉시 전환 (InsForge AI Gateway로 events를 컨텍스트 주입, 모델 `openai/gpt-5.4`).
+- **결정:** Nia 인덱싱 모드 — Sync daemon vs 직접 업로드 API 중 더 빠른 쪽. 5분 안에 결정 못 하면 **inline LLM fallback**으로 즉시 전환 (InsForge AI Gateway로 events를 컨텍스트 주입, 모델 `openai/gpt-4o-mini`).
 - **공유:** `NIA_API_KEY` + 결정한 모드를 DM.
 
 ### D0.3 — Fallback LLM = InsForge AI Gateway
 - 별도 OpenAI/Anthropic 키 **불필요.** InsForge가 OpenRouter 프록시로 주요 모델 제공.
 - 호출은 `INSFORGE_SERVICE_KEY` 그대로 사용. 결제는 InsForge AI 크레딧 풀 ($10 Pro 플랜).
-- 기본 모델: `openai/gpt-5.4` (사용자 지정). 비용·지연 부담 시 대안: `anthropic/claude-3.5-haiku`.
+- 기본 모델: `openai/gpt-4o-mini`.
+- ⚠ **모델 변경 전 검증 필수.** InsForge OpenRouter 라우팅이 활성-but-호출-실패 패턴 있음 (gpt-5/5.4/5.5 모두 enable=201, call=500 AI_UPSTREAM_UNAVAILABLE). 이 프로젝트에서 실제 통과 검증된 OpenAI 계열은 `openai/gpt-4o-mini` 단 하나 (T+1:30 측정). 비-OpenAI 대안은 `anthropic/claude-sonnet-4.5`. 모델 핀 전에 `POST /api/ai/chat/completion` 한 번 찌르고 200 확인.
 
 > ✋ **게이트:** `.env.example` 파일에 `INSFORGE_URL`, `INSFORGE_SERVICE_KEY`, `INSFORGE_ANON_KEY`, `NIA_API_KEY` 4개 등록 + j에게 값 공유 완료.
 
@@ -109,7 +110,7 @@ InsForge dashboard SQL editor에서 실행. 또는 InsForge CLI.
 - `apiKey` 검증
 - 최근 100개 이벤트 fetch
 - **Primary path (Nia mode):** Nia search API 호출 → answer + sources 반환
-- **Fallback path (LLM mode):** events를 마크다운 리스트로 포맷 → InsForge AI Gateway (`insforge.ai.chat.completions.create({ model: 'openai/gpt-5.4', messages: [...] })`)에 prompt: "User events:\n{events}\nQuestion: {question}\nAnswer concisely citing event timestamps." → 응답 반환
+- **Fallback path (LLM mode):** events를 마크다운 리스트로 포맷 → InsForge AI Gateway (`insforge.ai.chat.completions.create({ model: 'openai/gpt-4o-mini', messages: [...] })`)에 prompt: "User events:\n{events}\nQuestion: {question}\nAnswer concisely citing event timestamps." → 응답 반환
 - 어느 모드든 Response: `{ answer: string, sources: Array<{event_type, site_id, properties, occurred_at}> }`
 
 #### D1.4 — Nia 인덱싱
