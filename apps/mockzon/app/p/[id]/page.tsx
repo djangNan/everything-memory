@@ -5,6 +5,8 @@ import { getProduct, products } from "@/lib/products";
 
 type Params = { id: string };
 
+export const dynamicParams = false;
+
 export function generateStaticParams(): Params[] {
   return products.map((p) => ({ id: p.id }));
 }
