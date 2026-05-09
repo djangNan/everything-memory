@@ -5,6 +5,37 @@
 
 ---
 
+## 진척 현황 (live)
+
+상태 표기: ✅ 완료 · 🟡 부분 완료 · ⏸ 게이트 대기 · ❌ 미착수
+
+| Phase | 항목 | 상태 | 비고 / 차단 사유 |
+|---|---|:---:|---|
+| 0 | **J0.1** Monorepo 셋업 + 3 앱 스캐폴드 + 포트 분리 | ✅ | `7e33988` — pnpm workspace, mockple/mockzon/admin 빌드 그린 |
+| 0 | **J0.2** Vercel link x3 | ❌ | `vercel login` 필요 (사용자만) |
+| 0 | **J0.3** d 로부터 env 받기 | 🟡 | site key 들 코드에 박힘. `NEXT_PUBLIC_API_BASE` 는 T+2:15 |
+| 2 | **J3.1** mockple 페이지 골격 | ✅ | `/`, `/p/[id]` (6 SSG), `/login`, not-found, loading, metadata |
+| 2 | **J3.1** mockple **em.js 와이어링** | ⏸ | d 의 phase-1 main 머지 후 즉시 |
+| 2 | **J3.2** mockzon 페이지 골격 + PersonalBanner | ✅ | 8 상품, banner client component (env 미설정 시 조용히 skip) |
+| 2 | **J3.2** mockzon em.js 와이어링 + 배너 라이브 | ⏸ | em.js + API_BASE |
+| 2 | **J3.3** admin 페이지 골격 + 질의 UI + JumpToUser | ✅ | `a90b631` — site selector, NL 질의 폼, 이메일→hash 점프 |
+| 2 | **J3.3** admin 라이브 질의 | ⏸ | API_BASE |
+| — | **추가** 404 status fix (`dynamicParams=false`) | ✅ | `a90b631` — 미존재 상품 id 가 200→404 정상 반환 |
+| — | **추가** 동시 dev 서버 (`pnpm dev` from root) | ✅ | `pnpm -r --parallel dev` 3001/3002/3003 |
+| 3 | **J4.1** API_BASE Vercel env 추가 | ❌ | T+2:15 |
+| 3 | **J4.2** 3개 앱 프로덕션 배포 | ❌ | J0.2 후 |
+| 3 | **J4.3** E2E 스모크 (d 와 함께) | ❌ | 배포 후 |
+| 3 | **J4.4** em.js 프로덕션 반영 확인 | ❌ | 배포 후 |
+| 5 | **J5.1** README.md 본문 | ❌ | URL 확정 후 |
+| 5 | **J5.2** 제출 폼 | ❌ | 5:55 PM 까지 |
+| 5 | **J5.3** 데모 드라이런 | ❌ | 마무리 |
+
+**다음 트리거**:
+- d 의 `feat/d-phase1-db` (em.js stub + edge fns) main 머지 → J3.x em.js 와이어링 즉시
+- 사용자 `vercel login` → J0.2 / J4.2 진행
+
+---
+
 ## 소유 디렉토리 (이것만 수정)
 ```
 apps/mockple/      # 가전 쇼핑몰 데모 사이트
