@@ -1,10 +1,12 @@
 # OMC local state
 .omc/
+.claude/
 
 # Env files
 .env
 .env.local
 .env.*.local
+!.env.example
 
 # Node
 node_modules/
