@@ -5,8 +5,9 @@
 
 declare const Deno: { env: { get(k: string): string | undefined } };
 
-const BASE = Deno.env.get('INSFORGE_BASE_URL') ?? '';
-const SVC = Deno.env.get('INSFORGE_SERVICE_KEY') ?? '';
+// Subhosting auto-injects: API_KEY, ANON_KEY, INSFORGE_BASE_URL, INSFORGE_INTERNAL_URL.
+const BASE = Deno.env.get('INSFORGE_INTERNAL_URL') ?? Deno.env.get('INSFORGE_BASE_URL') ?? '';
+const SVC = Deno.env.get('API_KEY') ?? '';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
