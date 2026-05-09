@@ -7,12 +7,13 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.trim()) return;
-    // TODO: wire up EM.identify(email) once em.js stub lands.
+    const normalized = email.trim().toLowerCase();
+    if (!normalized) return;
     if (typeof window !== "undefined") {
-      window.localStorage.setItem("demo_email", email.trim().toLowerCase());
+      window.localStorage.setItem("demo_email", normalized);
+      await window.EM?.identify(normalized);
     }
     router.push("/");
   }

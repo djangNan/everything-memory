@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { products } from "@/lib/products";
 import PersonalBanner from "./components/PersonalBanner";
+import TrackPageView from "./_em/TrackPageView";
 
 export default function HomePage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-8">
+      <TrackPageView />
       <PersonalBanner />
       <h1 className="mb-6 text-2xl font-bold tracking-tight">
         Today&apos;s deals

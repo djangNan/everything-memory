@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProduct, products } from "@/lib/products";
+import TrackProductView from "@/app/_em/TrackProductView";
 
 type Params = { id: string };
 
@@ -36,6 +37,7 @@ export default async function ProductPage({
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-8">
+      <TrackProductView product={product} />
       <Link href="/" className="text-sm text-zinc-500 hover:text-orange-700">
         &larr; Back to MockZon
       </Link>

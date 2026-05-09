@@ -7,12 +7,13 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.trim()) return;
-    // TODO: wire up EM.identify(email) once em.js stub lands.
+    const normalized = email.trim().toLowerCase();
+    if (!normalized) return;
     if (typeof window !== "undefined") {
-      window.localStorage.setItem("demo_email", email.trim().toLowerCase());
+      window.localStorage.setItem("demo_email", normalized);
+      await window.EM?.identify(normalized);
     }
     router.push("/");
   }
@@ -23,7 +24,7 @@ export default function LoginPage() {
       <p className="mt-2 text-sm text-zinc-600">
         Just your email. No password needed for the demo.
       </p>
-      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+      <form onSubmit={(e) => { void handleSubmit(e); }} className="mt-8 space-y-4">
         <label className="block">
           <span className="text-sm font-medium text-zinc-700">Email</span>
           <input

@@ -104,7 +104,7 @@ EM.setDemographics({ gender: 'M', ageBand: '25-34' });
 | Method | Path | Purpose |
 |---|---|---|
 | POST | `/events` | Append one event. Body: `{ apiKey, userHash, eventType, properties, occurredAt }` |
-| POST | `/profile/query` | Body: `{ apiKey, userHash, question }`. Returns `{ answer, sources[] }` via Nia. |
+| POST | `/profile-query` | Body: `{ apiKey, userHash, question }`. Returns `{ answer, sources[] }` via Nia. |
 | GET  | `/profile/{userHash}/raw` | Returns recent events (debug / admin only). |
 
 ### Auth

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import EmInit from "./_em/EmInit";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +29,11 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script src="/em.js" defer />
+      </head>
       <body className="min-h-full flex flex-col bg-[#fffaf3] text-zinc-900">
+        <EmInit />
         <header className="bg-zinc-900 text-white">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
             <Link href="/" className="text-lg font-bold tracking-tight">

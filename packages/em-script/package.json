@@ -1,0 +1,11 @@
+{
+  "name": "@em/em-script",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Everything Memory embeddable script (hand-bundled IIFE).",
+  "main": "em.js",
+  "files": ["em.js"],
+  "scripts": {
+    "sync": "cp em.js ../../apps/admin/public/em.js && cp em.js ../../apps/mockple/public/em.js && cp em.js ../../apps/mockzon/public/em.js"
+  }
+}

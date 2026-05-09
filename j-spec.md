@@ -181,7 +181,7 @@ export default function PersonalBanner() {
     const userHash = localStorage.getItem('em_user_hash');
     if (!userHash) return;
 
-    fetch(`${process.env.NEXT_PUBLIC_API_BASE}/profile/query`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE}/profile-query`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -231,7 +231,7 @@ const SITES = [
 #### NL 질의 UI
 ```tsx
 async function ask() {
-  const r = await fetch(`${API_BASE}/profile/query`, {
+  const r = await fetch(`${API_BASE}/profile-query`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

@@ -102,7 +102,7 @@ InsForge dashboard SQL editor에서 실행. 또는 InsForge CLI.
 - OPTIONS preflight 처리
 - 끝나기 전에 `niaSync.upsertProfile(userHash)` fire-and-forget 호출 (D1.4와 연결)
 
-#### D1.3 — POST /profile/query
+#### D1.3 — POST /profile-query
 파일: `services/api/profile-query.ts`
 
 요구사항:
@@ -133,7 +133,7 @@ InsForge dashboard SQL editor에서 실행. 또는 InsForge CLI.
 > ```
 > curl -XPOST .../events -d '{"apiKey":"mockple_key_demo_2026","userHash":"abc","eventType":"product_view","properties":{"name":"iPhone"}}'
 > curl -XPOST .../events -d '{"apiKey":"mockzon_key_demo_2026","userHash":"abc","eventType":"page_view","properties":{}}'
-> curl -XPOST .../profile/query -d '{"apiKey":"mockzon_key_demo_2026","userHash":"abc","question":"What is this user interested in?"}'
+> curl -XPOST .../profile-query -d '{"apiKey":"mockzon_key_demo_2026","userHash":"abc","question":"What is this user interested in?"}'
 > ```
 
 ---
@@ -215,7 +215,7 @@ EM.track(eventType: string, properties?: object): Promise<void>
 EM.setDemographics({ gender?: string, ageBand?: string, ... }): Promise<void>
 
 POST /events       — script 내부에서만 호출. j는 모름.
-POST /profile/query — j의 mockzon 배너 + admin이 호출.
+POST /profile-query — j의 mockzon 배너 + admin이 호출.
   Body: { apiKey, userHash, question }
   Resp: { answer: string, sources: object[] }
 ```
@@ -228,7 +228,7 @@ POST /profile/query — j의 mockzon 배너 + admin이 호출.
 - [ ] `.env.example` 4개 키 등록
 - [ ] DB 3 테이블 + 2 site rows 시드
 - [ ] `/events` 200 + DB 행 확인
-- [ ] `/profile/query` 자연어 답변 반환 (Nia 또는 fallback 어느 쪽이든)
+- [ ] `/profile-query` 자연어 답변 반환 (Nia 또는 fallback 어느 쪽이든)
 - [ ] `em.js` stub T+1:00에 j에게 전달
 - [ ] `em.js` 본 구현 T+2:00 안에 완료
 - [ ] InsForge 프로덕션 배포 + URL j에게 전달

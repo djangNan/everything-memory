@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { products } from "@/lib/products";
+import TrackPageView from "./_em/TrackPageView";
 
 export default function HomePage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
+      <TrackPageView />
       <section className="mb-12 text-center">
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           The newest. The brightest.

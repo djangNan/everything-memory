@@ -42,7 +42,7 @@
    ┌──────────────────────────────────┐
    │  InsForge Edge Functions (d 소유) │
    │   POST /events                    │
-   │   POST /profile/query             │
+   │   POST /profile-query             │
    └──────┬─────────────┬─────────────┘
           ▼             ▼
    ┌─────────────┐  ┌──────────┐
@@ -77,7 +77,7 @@ EM.setDemographics(d: { gender?, ageBand?, ... }): Promise<void>
 | Method | Path | Body | Response |
 |---|---|---|---|
 | POST | `/events` | `{ apiKey, userHash, eventType, properties, occurredAt? }` | `{ ok: true, eventId }` |
-| POST | `/profile/query` | `{ apiKey, userHash, question }` | `{ answer: string, sources: Event[] }` |
+| POST | `/profile-query` | `{ apiKey, userHash, question }` | `{ answer: string, sources: Event[] }` |
 | GET | `/profile/{userHash}/raw` | — | `{ events: Event[] }` (debug) |
 
 `Event` 형태:
