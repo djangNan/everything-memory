@@ -310,7 +310,7 @@ wait
 - **InsForge** — auth, Postgres, edge functions
 - **Nia** — semantic indexing of cross-site behavior
 - **Vercel** — Next.js demo storefronts + admin
-- **InsForge AI Gateway** (`openai/gpt-5.5`) — natural-language profile synthesis
+- **InsForge AI Gateway** (`openai/gpt-5.4`) — natural-language profile synthesis
 
 ## Why
 Third-party cookies are gone. AI agents need durable, queryable user context. Everything Memory gives sites a one-line script to share intent across domains, while keeping email private (SHA-256 only).

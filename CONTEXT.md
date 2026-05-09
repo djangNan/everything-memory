@@ -138,7 +138,7 @@ NEXT_PUBLIC_MOCKZON_KEY=mockzon_key_demo_2026
 | 시맨틱 인덱스 | Nia (또는 LLM fallback) | 스폰서, NIAHACK 코드 |
 | 프론트 3개 앱 | Next.js (App Router) + Tailwind | Vercel 배포 |
 | 스크립트 라이브러리 | Vanilla TS, tsup IIFE 빌드 | 의존성 0 |
-| LLM (NL 질의) | InsForge AI Gateway (model: `openai/gpt-5.5`) | 사용자 지정: OpenAI 계열. InsForge 크레딧 차감, 별도 키 없음 |
+| LLM (NL 질의) | InsForge AI Gateway (model: `openai/gpt-5.4`) | 사용자 지정: OpenAI 계열. InsForge 크레딧 차감, 별도 키 없음 |
 | 모노레포 | pnpm workspace | j가 T0.1에서 셋업 |
 
 ---
