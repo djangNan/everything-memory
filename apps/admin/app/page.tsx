@@ -1,5 +1,6 @@
 import SiteSelector from "./components/SiteSelector";
 import RecentUsers from "./components/RecentUsers";
+import JumpToUser from "./components/JumpToUser";
 
 export default function HomePage() {
   return (
@@ -18,22 +19,16 @@ export default function HomePage() {
 
       <section className="mt-10">
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-500">
+          Open a user
+        </h2>
+        <JumpToUser />
+      </section>
+
+      <section className="mt-10">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-500">
           Recent users
         </h2>
         <RecentUsers />
-      </section>
-
-      <section className="mt-10 rounded-lg border border-slate-200 bg-white p-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
-          Try a user manually
-        </h2>
-        <p className="mt-2 text-sm text-slate-600">
-          Visit{" "}
-          <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs">
-            /users/&lt;sha256-of-email&gt;
-          </code>{" "}
-          to ask a question about a specific user.
-        </p>
       </section>
     </div>
   );

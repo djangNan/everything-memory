@@ -32,8 +32,7 @@ export default function RootLayout({
         <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/80 backdrop-blur">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
             <Link href="/" className="text-lg font-semibold tracking-tight">
-              <span className="text-black"></span>
-              <span className="ml-1">MockPle</span>
+              MockPle
             </Link>
             <nav className="flex items-center gap-6 text-sm text-zinc-600">
               <Link href="/" className="hover:text-black">
