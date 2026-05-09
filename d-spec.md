@@ -32,13 +32,13 @@ db/migrations/         # SQL schema
 ### D0.2 — Nia 계정 + 키
 - app.trynia.ai 가입 → Billing → 프로모코드 `NIAHACK`
 - API key 캡처
-- **결정:** Nia 인덱싱 모드 — Sync daemon vs 직접 업로드 API 중 더 빠른 쪽. 5분 안에 결정 못 하면 **inline LLM fallback**으로 즉시 전환 (Anthropic Haiku로 events를 그냥 컨텍스트 주입).
+- **결정:** Nia 인덱싱 모드 — Sync daemon vs 직접 업로드 API 중 더 빠른 쪽. 5분 안에 결정 못 하면 **inline LLM fallback**으로 즉시 전환 (OpenAI GPT-5.5로 events를 그냥 컨텍스트 주입).
 - **공유:** `NIA_API_KEY` + 결정한 모드를 DM.
 
-### D0.3 — Anthropic 키 (fallback용)
-- `ANTHROPIC_API_KEY` 준비 (개인 키 또는 `claude-haiku-4-5`).
+### D0.3 — OpenAI 키 (fallback용)
+- `OPENAI_API_KEY` 준비 (개인 키, 모델 `gpt-5.5`).
 
-> ✋ **게이트:** `.env.example` 파일에 `INSFORGE_URL`, `INSFORGE_SERVICE_KEY`, `NIA_API_KEY`, `ANTHROPIC_API_KEY` 4개 등록 + j에게 값 공유 완료.
+> ✋ **게이트:** `.env.example` 파일에 `INSFORGE_URL`, `INSFORGE_SERVICE_KEY`, `NIA_API_KEY`, `OPENAI_API_KEY` 4개 등록 + j에게 값 공유 완료.
 
 ---
 
@@ -107,7 +107,7 @@ InsForge dashboard SQL editor에서 실행. 또는 InsForge CLI.
 - `apiKey` 검증
 - 최근 100개 이벤트 fetch
 - **Primary path (Nia mode):** Nia search API 호출 → answer + sources 반환
-- **Fallback path (LLM mode):** events를 마크다운 리스트로 포맷 → Anthropic Haiku에 prompt: "User events:\n{events}\nQuestion: {question}\nAnswer concisely citing event timestamps." → 응답 반환
+- **Fallback path (LLM mode):** events를 마크다운 리스트로 포맷 → OpenAI GPT-5.5 (`gpt-5.5`)에 prompt: "User events:\n{events}\nQuestion: {question}\nAnswer concisely citing event timestamps." → 응답 반환
 - 어느 모드든 Response: `{ answer: string, sources: Array<{event_type, site_id, properties, occurred_at}> }`
 
 #### D1.4 — Nia 인덱싱

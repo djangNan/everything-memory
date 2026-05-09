@@ -1,0 +1,13 @@
+{
+  "name": "everything-memory",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:mockple": "pnpm --filter mockple dev",
+    "dev:mockzon": "pnpm --filter mockzon dev",
+    "dev:admin": "pnpm --filter admin dev",
+    "build": "pnpm -r build"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
