@@ -310,7 +310,7 @@ wait
 - **InsForge** — auth, Postgres, edge functions
 - **Nia** — semantic indexing of cross-site behavior
 - **Vercel** — Next.js demo storefronts + admin
-- **InsForge AI Gateway** (`openai/gpt-4o-mini`) — natural-language profile synthesis
+- **InsForge AI Gateway** (`anthropic/claude-opus-4.5`) — natural-language profile synthesis
 
 ## Why
 Third-party cookies are gone. AI agents need durable, queryable user context. modn-profile gives sites a one-line script to share intent across domains, while keeping email private (SHA-256 only).

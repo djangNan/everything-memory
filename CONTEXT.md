@@ -160,7 +160,7 @@ NEXT_PUBLIC_MOCKZON_KEY=mockzon_key_demo_2026
 | 시맨틱 인덱스 | **Nia Context Sharing API** (primary) | 스폰서, NIAHACK 코드. /events가 컨텍스트 저장, /profile-query가 시맨틱 검색 → 결과를 LLM에 주입 |
 | 프론트 3개 앱 | Next.js (App Router) + Tailwind | Vercel 배포 |
 | 스크립트 라이브러리 | Vanilla TS, tsup IIFE 빌드 | 의존성 0 |
-| LLM (NL 질의) | InsForge AI Gateway (model: `openai/gpt-4o-mini`) | 사용자 지정: OpenAI 계열. InsForge 크레딧 차감, 별도 키 없음 |
+| LLM (NL 질의) | InsForge AI Gateway (model: `anthropic/claude-opus-4.5`) | 사용자 지정: OpenAI 계열. InsForge 크레딧 차감, 별도 키 없음 |
 | 모노레포 | pnpm workspace | j가 T0.1에서 셋업 |
 
 ---

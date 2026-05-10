@@ -21,7 +21,7 @@ declare const Deno: { env: { get(k: string): string | undefined } };
 
 const BASE = Deno.env.get('INSFORGE_INTERNAL_URL') ?? Deno.env.get('INSFORGE_BASE_URL') ?? '';
 const SVC = Deno.env.get('API_KEY') ?? '';
-const MODEL = Deno.env.get('LLM_MODEL') ?? 'openai/gpt-4o-mini';
+const MODEL = Deno.env.get('LLM_MODEL') ?? 'anthropic/claude-opus-4.5';
 const NIA_KEY = Deno.env.get('NIA_API_KEY') ?? '';
 const NIA = 'https://apigcp.trynia.ai/v2';
 
