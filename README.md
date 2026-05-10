@@ -1,4 +1,4 @@
-# Everything Memory
+# modn-profile
 
 Sites embed a `<script>` tag, our backend collects user behaviour, AI synthesizes a cross-site memory.
 

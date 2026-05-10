@@ -291,7 +291,7 @@ wait
 
 ### J5.1 — README.md
 ```markdown
-# Everything Memory
+# modn-profile
 
 > Cross-site user memory for the AI agent era.
 > 사이트들이 우리 script 한 줄을 임베드하면, AI 에이전트가 자연어로 cross-site 사용자 프로필을 질의할 수 있습니다.
@@ -313,7 +313,7 @@ wait
 - **InsForge AI Gateway** (`openai/gpt-4o-mini`) — natural-language profile synthesis
 
 ## Why
-Third-party cookies are gone. AI agents need durable, queryable user context. Everything Memory gives sites a one-line script to share intent across domains, while keeping email private (SHA-256 only).
+Third-party cookies are gone. AI agents need durable, queryable user context. modn-profile gives sites a one-line script to share intent across domains, while keeping email private (SHA-256 only).
 
 ## Team
 - d — Backend + Script lib

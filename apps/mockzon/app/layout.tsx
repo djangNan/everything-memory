@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ModnZon — everything for everyone",
-  description: "ModnZon: a tiny demo marketplace for Everything Memory.",
+  description: "ModnZon: a tiny demo marketplace for modn-profile.",
 };
 
 const SUBNAV = [
@@ -106,7 +106,7 @@ export default function RootLayout({
                   <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="currentColor">
                     <path d="M8 0a5 5 0 0 1 5 5c0 4-5 11-5 11S3 9 3 5a5 5 0 0 1 5-5zm0 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
                   </svg>
-                  Seoul 06236
+                  SF 94103
                 </span>
               </Link>
 
@@ -233,7 +233,7 @@ export default function RootLayout({
                 Interest-Based Ads &nbsp;·&nbsp; © 2026 ModnZon Demo
               </p>
               <p className="mt-1 text-[11px] text-[#999999]">
-                ModnZon — Everything Memory demo. Not a real Amazon site.
+                ModnZon — modn-profile demo. Not a real Amazon site.
               </p>
             </div>
           </div>

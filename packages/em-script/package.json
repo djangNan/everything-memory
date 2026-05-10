@@ -2,7 +2,7 @@
   "name": "@em/em-script",
   "private": true,
   "version": "0.1.0",
-  "description": "Everything Memory embeddable script (hand-bundled IIFE).",
+  "description": "modn-profile embeddable script (hand-bundled IIFE).",
   "main": "em.js",
   "files": ["em.js"],
   "scripts": {

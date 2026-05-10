@@ -241,7 +241,7 @@ export default async function ProductPage({
               </p>
               <p className="mt-2 text-[13px] text-[#0f1111]">
                 <span className="text-[#007185] hover:text-[#c7511f] hover:underline">
-                  Deliver to Seoul 06236
+                  Deliver to SF 94103
                 </span>
               </p>
               <p className="mt-3 text-[18px] font-medium text-[#007600]">

@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ModnPle — premium gadgets",
-  description: "ModnPle: a tiny demo storefront for Everything Memory.",
+  description: "ModnPle: a tiny demo storefront for modn-profile.",
 };
 
 const NAV_LINKS = [
@@ -145,7 +145,7 @@ export default function RootLayout({
             <div className="mt-9 flex flex-col gap-2 border-t border-[#d2d2d7] pt-5 sm:flex-row sm:items-center sm:justify-between">
               <p>Copyright © 2026 ModnPle Inc. All rights reserved.</p>
               <p className="text-[11px]">
-                ModnPle — Everything Memory demo. Not a real Apple site.
+                ModnPle — modn-profile demo. Not a real Apple site.
               </p>
             </div>
           </div>
