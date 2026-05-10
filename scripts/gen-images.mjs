@@ -85,12 +85,23 @@ async function generateOne({ id, name, category, blurb }, { style, outDir, site 
     // not present, proceed
   }
 
-  const prompt = buildPrompt({ name, category, blurb, style });
+  const prompt = TRANSPARENT
+    ? [
+        `Subject: ${name} (${category}). ${blurb}`,
+        "Style: photorealistic product photography on a fully transparent background. Subject only — no floor, no shadow plate, no studio backdrop.",
+        "Composition: 1:1 square, product fills 70-80% of the frame, centered, slight three-quarter angle, soft contact shadow allowed underneath.",
+        "Render the product with realistic materials (metals, glass, plastics, fabrics, wood) and accurate proportions.",
+        "Do NOT include any text, brand logos, model numbers, watermarks, hands, people, stickers, or background elements.",
+      ].join(" \n")
+    : buildPrompt({ name, category, blurb, style });
   const body = {
     model: MODEL,
     prompt,
     size: "1024x1024",
     n: 1,
+    ...(TRANSPARENT
+      ? { background: "transparent", output_format: "png" }
+      : {}),
   };
 
   const t0 = Date.now();
