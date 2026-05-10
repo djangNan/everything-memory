@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Everything Memory — Cohort console",
+  title: "modn-profile — Cohort console",
   description:
-    "Ask aggregate questions about cohorts of users. k-anonymous by default.",
+    "Aggregate cohort questions across connected sites. k-anonymous by default.",
 };
 
 export default function RootLayout({
@@ -37,7 +37,7 @@ export default function RootLayout({
               <span className="rounded bg-emerald-400 px-1.5 py-0.5 text-xs font-bold text-slate-900">
                 EM
               </span>
-              <span>Everything Memory</span>
+              <span>modn-profile</span>
               <span className="ml-2 text-xs font-normal text-slate-400">
                 Admin
               </span>
@@ -47,7 +47,7 @@ export default function RootLayout({
         </header>
         <main className="flex flex-1 flex-col">{children}</main>
         <footer className="border-t border-slate-200 py-6 text-center text-xs text-slate-500">
-          Everything Memory · for site owners and AI agents
+          modn-profile · for site owners and AI agents
         </footer>
       </body>
     </html>

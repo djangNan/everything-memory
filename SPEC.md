@@ -1,4 +1,4 @@
-# SPEC: Everything Memory — Cross-Site User Profile Sync
+# SPEC: modn-profile — Cross-Site User Profile Sync
 
 ## Metadata
 - Hackathon: Nozomio Hackathon (3-hour build window)
