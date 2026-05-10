@@ -12,6 +12,8 @@ type Source = {
 type ProfileQueryResponse = {
   answer: string;
   sources: Source[];
+  via?: "nia" | "fallback" | "empty";
+  nia?: { used: boolean; hits: number; raw?: number };
 };
 
 const MAX_QUESTION_LEN = 500;
@@ -100,6 +102,8 @@ export default function AskUser({
       setResponse({
         answer: typeof data.answer === "string" ? data.answer : "",
         sources: Array.isArray(data.sources) ? data.sources : [],
+        via: data.via,
+        nia: data.nia,
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -172,9 +176,28 @@ export default function AskUser({
 
       {response ? (
         <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Answer
-          </p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Answer
+            </p>
+            {response.via === "nia" ? (
+              <span
+                title={`Nia returned ${response.nia?.raw ?? "?"} raw results, ${response.nia?.hits ?? 0} matched this user`}
+                className="inline-flex items-center gap-1.5 rounded-full bg-violet-50 px-2.5 py-0.5 text-[11px] font-semibold text-violet-700 ring-1 ring-inset ring-violet-200"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-violet-500" />
+                via Nia · {response.nia?.hits ?? 0} hits
+              </span>
+            ) : response.via === "fallback" ? (
+              <span
+                title="Nia returned no matches; answered from latest 100 DB events"
+                className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-600 ring-1 ring-inset ring-slate-200"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
+                via DB fallback
+              </span>
+            ) : null}
+          </div>
           <p className="mt-3 whitespace-pre-wrap text-base leading-relaxed text-slate-900">
             {response.answer || (
               <span className="text-slate-400">No answer returned.</span>

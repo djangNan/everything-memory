@@ -6,8 +6,11 @@
 declare const Deno: { env: { get(k: string): string | undefined } };
 
 // Subhosting auto-injects: API_KEY, ANON_KEY, INSFORGE_BASE_URL, INSFORGE_INTERNAL_URL.
+// NIA_API_KEY pushed via /api/secrets so it shows up in Deno.env too.
 const BASE = Deno.env.get('INSFORGE_INTERNAL_URL') ?? Deno.env.get('INSFORGE_BASE_URL') ?? '';
 const SVC = Deno.env.get('API_KEY') ?? '';
+const NIA_KEY = Deno.env.get('NIA_API_KEY') ?? '';
+const NIA = 'https://apigcp.trynia.ai/v2';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -57,11 +60,51 @@ async function insertEvent(input: {
   event_type: string;
   properties: Record<string, unknown>;
   occurred_at?: string;
-}): Promise<string | null> {
+}): Promise<{ id: string; occurred_at: string } | null> {
   const r = await db('POST', `/api/database/records/events`, input, 'return=representation');
   if (!r.ok) return null;
-  const rows = await r.json() as Array<{ id: string }>;
-  return rows[0]?.id ?? null;
+  const rows = await r.json() as Array<{ id: string; occurred_at: string }>;
+  return rows[0] ?? null;
+}
+
+// Fire-and-forget save to Nia Context Sharing.
+// Runs in episodic memory (7d TTL) — long enough for the demo + a week of judging.
+async function saveToNia(event: {
+  user_hash: string;
+  site_id: string;
+  event_type: string;
+  properties: Record<string, unknown>;
+  occurred_at: string;
+}): Promise<void> {
+  if (!NIA_KEY) return;
+  const shortHash = event.user_hash.slice(0, 12);
+  const propStr = JSON.stringify(event.properties);
+  const niceProps = Object.entries(event.properties)
+    .map(([k, v]) => `${k}=${typeof v === 'string' ? v : JSON.stringify(v)}`)
+    .join(', ');
+  try {
+    await fetch(`${NIA}/contexts`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${NIA_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: `${shortHash} — ${event.event_type} on ${event.site_id}`,
+        summary: `User ${shortHash} performed ${event.event_type} on ${event.site_id} at ${event.occurred_at}.${niceProps ? ' Properties: ' + niceProps + '.' : ''}`,
+        content: `User ${event.user_hash} (short ${shortHash}) performed event ${event.event_type} on site ${event.site_id} at ${event.occurred_at}. Properties JSON: ${propStr}.`,
+        tags: [shortHash, event.site_id, event.event_type],
+        agent_source: 'em-events',
+        memory_type: 'episodic',
+        metadata: {
+          user_hash: event.user_hash,
+          site_id: event.site_id,
+          event_type: event.event_type,
+          properties: event.properties,
+          occurred_at: event.occurred_at,
+        },
+      }),
+    });
+  } catch (_) {
+    // best effort
+  }
 }
 
 export default async function (req: Request): Promise<Response> {
@@ -80,19 +123,25 @@ export default async function (req: Request): Promise<Response> {
   if (!site) return json({ error: 'invalid apiKey' }, 401);
 
   await ensureUser(String(userHash));
-  const eventId = await insertEvent({
+  const propsClean = properties && typeof properties === 'object' ? properties : {};
+  const inserted = await insertEvent({
     user_hash: String(userHash),
     site_id: site.site_id,
     event_type: String(eventType),
-    properties: properties && typeof properties === 'object' ? properties : {},
+    properties: propsClean,
     occurred_at: occurredAt,
   });
-  if (!eventId) return json({ error: 'insert failed' }, 500);
+  if (!inserted) return json({ error: 'insert failed' }, 500);
 
-  // Fire-and-forget Nia upsert (no-op in fallback mode).
-  // Inlined here because Subhosting deploys single-file functions.
-  // To enable Nia: replace this block with a fetch to apigcp.trynia.ai.
-  void Promise.resolve();
+  // Fire-and-forget Nia context save. Subhosting keeps async tasks alive briefly
+  // after the response; if it gets cut, we just lose this event in Nia (DB is canonical).
+  void saveToNia({
+    user_hash: String(userHash),
+    site_id: site.site_id,
+    event_type: String(eventType),
+    properties: propsClean,
+    occurred_at: inserted.occurred_at,
+  });
 
-  return json({ ok: true, eventId });
+  return json({ ok: true, eventId: inserted.id });
 }

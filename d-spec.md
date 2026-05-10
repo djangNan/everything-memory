@@ -32,7 +32,7 @@ db/migrations/         # SQL schema
 ### D0.2 — Nia 계정 + 키
 - app.trynia.ai 가입 → Billing → 프로모코드 `NIAHACK`
 - API key 캡처
-- **결정:** Nia 인덱싱 모드 — Sync daemon vs 직접 업로드 API 중 더 빠른 쪽. 5분 안에 결정 못 하면 **inline LLM fallback**으로 즉시 전환 (InsForge AI Gateway로 events를 컨텍스트 주입, 모델 `openai/gpt-4o-mini`).
+- **결정 (T+2:30 갱신):** ~~Sync daemon vs 직접 업로드 API~~ → **Nia Context Sharing API 사용.** Sources 슬롯 (lifetime 3개 한계) 안 쓰고 `/v2/contexts` 에 이벤트별 episodic 컨텍스트 저장 + `/v2/contexts/semantic-search` (vector + BM25 hybrid) 로 검색. /events 가 fire-and-forget 으로 push, /profile-query 가 LLM 합성 직전에 검색.
 - **공유:** `NIA_API_KEY` + 결정한 모드를 DM.
 
 ### D0.3 — Fallback LLM = InsForge AI Gateway
