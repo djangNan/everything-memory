@@ -158,7 +158,7 @@ export default async function (req: Request): Promise<Response> {
       users: users.length,
       users_inferred: inferredCount,
       events: events.length,
-      sites: sites.length,
+      sites: Object.keys(eventsBySite).length,
       events_per_user_avg: users.length === 0 ? 0 : Math.round((events.length / users.length) * 10) / 10,
     },
     interests_top: interestsSorted.slice(0, 12),
