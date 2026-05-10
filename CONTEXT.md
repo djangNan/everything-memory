@@ -22,11 +22,11 @@
 
 | 시간 | 화면 | 멘트 요지 |
 |---|---|---|
-| 0:00–0:20 | 두 데모 사이트 띄움 (mockple, mockzon) | "둘 다 우리 script 한 줄만 임베드했습니다." |
-| 0:20–1:10 | mockple 로그인 (`demo@user.com`) → iPhone, MacBook 조회 | "사용자 행동을 우리 백엔드로 흘려보냅니다." |
-| 1:10–2:00 | mockzon 같은 이메일 로그인 → 홈에 *"Recommended for Apple fans"* 배너 | "다른 도메인인데 동일 유저 인식. 이메일 SHA-256 해시 매칭." |
-| 2:00–2:50 | admin 대시보드에서 "What is this user interested in?" 입력 → Nia 답변 + 출처 | "에이전트가 자연어로 질의. Nia가 11.3% 환각 감소." |
-| 2:50–3:00 | URL 다시 보이기 + 마무리 | "라이브 배포. 1.7배 정확도, 30% 토큰 절감." |
+| 0:00–0:20 | 두 데모 사이트 띄움 (mockple, mockzon) | "둘 다 우리 script 한 줄만 임베드했습니다. 사이트 데이터를 통합해 코호트 인사이트로 환원합니다." |
+| 0:20–1:10 | mockple 로그인 → 가전류 조회. 다른 탭 mockzon 로그인 → 패션류 조회. | "이벤트는 InsForge에 적재되고 동시에 Nia 컨텍스트로 색인됩니다." |
+| 1:10–2:00 | admin **Dashboard** 열기 — KPI 4개 + 카테고리 분포 막대 + 사이트별 활동 + 최근 추론 카드 | "한 화면으로 모든 사이트가 한 풀로 묶여 있습니다. 각 사이트의 데이터가 통합되어 코호트로 환원돼요." |
+| 2:00–2:50 | **Cohort console** → interests=[phones] 필터 + "What does this cohort want most?" → "iPhone 15 Pro 선호…" + via:nia 배지 + sources | "개인 접근은 차단. 코호트 ≥2일 때만 답변. 메타데이터는 LLM이 events 보고 주기적으로 추론한 결과입니다. Nia가 11.3% 환각 감소." |
+| 2:50–3:00 | URL 다시 보이기 + 마무리 | "라이브 배포. InsForge AI Gateway · Nia Context Sharing · k-anon 보장." |
 
 ---
 
@@ -34,28 +34,42 @@
 
 ```
 ┌────────────────┐     ┌────────────────┐
-│  mockple.app   │     │  mockzon.app   │   <- Vercel 호스팅 데모 스토어 (j 소유)
+│  mockple.app   │     │  mockzon.app   │   <- Vercel 데모 스토어 (각 사이트 1개 라인 임베드)
 │  <script em.js>│     │  <script em.js>│
 └──────┬─────────┘     └──────┬─────────┘
-       │ POST /events         │ POST /events
+       │ POST /events         │ POST /events    ── per-site apiKey
        ▼                      ▼
-   ┌──────────────────────────────────┐
-   │  InsForge Edge Functions (d 소유) │
-   │   POST /events                    │
-   │   POST /profile-query             │
-   └──────┬─────────────┬─────────────┘
-          ▼             ▼
-   ┌─────────────┐  ┌──────────┐
-   │ InsForge PG │  │   Nia    │   <- 시맨틱 인덱싱 (d 소유, fallback: 인라인 LLM)
-   │  events     │  │ profiles │
-   │  users      │  │ (md docs)│
-   │  sites      │  └────┬─────┘
-   └─────────────┘       │
-                         ▼
-                ┌─────────────────────────┐
-                │ admin Dashboard         │   <- j 소유
-                │ (자연어 질의 UI)         │
-                └─────────────────────────┘
+   ┌────────────────────────────────────────────┐
+   │  InsForge Edge Functions (Subhosting Deno) │
+   │   POST /events            (write + Nia)    │
+   │   POST /cohort-query      (read, cohort)   │
+   │   GET  /cohort-stats      (read, dash)     │
+   │   POST /infer-demographics (admin batch)   │
+   └──────┬───────────────┬─────────────────────┘
+          ▼               ▼
+   ┌─────────────┐    ┌──────────────────────────┐
+   │ InsForge PG │    │   Nia Context Sharing    │
+   │  events     │    │  /v2/contexts (write)    │
+   │  users      │    │  /v2/contexts/           │
+   │   .demogs.. │    │     semantic-search      │
+   │  sites      │    │   episodic, 7d TTL       │
+   └─────────────┘    └──────────────────────────┘
+          │                    │
+          │  joined by         │
+          │  cohort-query +    │
+          │  cohort-stats →    │
+          ▼                    ▼
+   ┌───────────────────────────────────────────┐
+   │  admin (Vercel, single integrated view)   │
+   │   /         Dashboard (KPIs + charts)     │
+   │   /query    Cohort console (NL Q&A)       │
+   │   admin_key_demo_2026 — site-agnostic     │
+   └───────────────────────────────────────────┘
+                         ▲
+                         │ k-anon ≥ 2, never returns user_hash
+                         │ /infer-demographics: LLM reads events,
+                         │   writes users.demographics_json (region,
+                         │   gender, age_band, interests, conf)
 ```
 
 ---
@@ -74,22 +88,30 @@ EM.setDemographics(d: { gender?, ageBand?, ... }): Promise<void>
 
 ### 3.2 REST 엔드포인트
 
-| Method | Path | Body | Response |
-|---|---|---|---|
-| POST | `/events` | `{ apiKey, userHash, eventType, properties, occurredAt? }` | `{ ok: true, eventId }` |
-| POST | `/profile-query` | `{ apiKey, userHash, question }` | `{ answer: string, sources: Event[] }` |
-| GET | `/profile/{userHash}/raw` | — | `{ events: Event[] }` (debug) |
+| Method | Path | Body | Response | Auth |
+|---|---|---|---|---|
+| POST | `/events` | `{ apiKey, userHash, eventType, properties, occurredAt? }` | `{ ok: true, eventId }` | per-site apiKey |
+| POST | `/cohort-query` | `{ apiKey, filters: {region?, gender?, age_band?, interests?[]}, question, limit_users? }` | `{ answer, sources: Event[], cohort: {size, filters, k_anonymous, min_size}, via: 'nia'\|'fallback'\|'refused'\|'empty', nia? }` | admin apiKey |
+| GET  | `/cohort-stats` | — | `{ totals, interests_top, gender, age_band, region, events_by_site, events_by_type, events_by_day, top_products, recent_inferences }` | open (aggregate, no PII) |
+| POST | `/infer-demographics` | `{ adminToken, force?, userHashes? }` | `{ inferred_count, skipped_count, inferred[], skipped[] }` | InsForge service key (server only) |
+| GET  | `/recent-users` | — | `{ users: [{user_hash, created_at, event_count}] }` | open (legacy probe; cohort dashboard preferred) |
+
+> ⚠ **개인 접근 (`/profile-query`, `/users/{hash}`) 폐쇄.** 보안상 admin은 코호트 단위로만 질의. k-anonymity ≥ `min_size` (현재 2) 미만 코호트는 자동 거부.
 
 `Event` 형태:
 ```ts
 { event_type: string, site_id: string, properties: object, occurred_at: string }
+// user_hash는 응답에서 절대 노출하지 않음
 ```
 
 ### 3.3 인증
-- 모든 요청은 `apiKey` (per-site)로 인증.
-- 데모용 키 (시드된 값):
-  - mockple: `mockple_key_demo_2026`
-  - mockzon: `mockzon_key_demo_2026`
+- `/events`: 사이트 자체의 `apiKey`. 사이트 자기 데이터만 푸시.
+- `/cohort-query`, `/cohort-stats`: admin은 사이트 비종속 키 `admin_key_demo_2026` 사용. 응답에는 모든 사이트 데이터 통합 반영.
+- `/infer-demographics`: InsForge service key 필수. 절대 브라우저 노출 금지.
+- 데모 키 (시드):
+  - mockple: `mockple_key_demo_2026` (push only)
+  - mockzon: `mockzon_key_demo_2026` (push only)
+  - admin:   `admin_key_demo_2026`   (read across all sites)
 - CORS: `Access-Control-Allow-Origin: *` (해커톤 한정).
 
 ---

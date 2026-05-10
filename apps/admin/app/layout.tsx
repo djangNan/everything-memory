@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Nav from "./components/Nav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Everything Memory — Admin",
-  description: "Ask any question about your users in plain English.",
+  title: "Everything Memory — Cohort console",
+  description:
+    "Ask aggregate questions about cohorts of users. k-anonymous by default.",
 };
 
 export default function RootLayout({
@@ -30,7 +32,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">
         <header className="bg-slate-900 text-white">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
             <Link href="/" className="flex items-center gap-2 text-base font-semibold">
               <span className="rounded bg-emerald-400 px-1.5 py-0.5 text-xs font-bold text-slate-900">
                 EM
@@ -40,11 +42,7 @@ export default function RootLayout({
                 Admin
               </span>
             </Link>
-            <nav className="text-sm text-slate-300">
-              <Link href="/" className="hover:text-white">
-                Site
-              </Link>
-            </nav>
+            <Nav />
           </div>
         </header>
         <main className="flex flex-1 flex-col">{children}</main>
