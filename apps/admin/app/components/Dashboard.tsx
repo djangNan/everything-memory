@@ -80,7 +80,7 @@ function Card({
   return (
     <div
       className={
-        "rounded-lg border border-slate-200 bg-white p-5 shadow-sm " + className
+        "flex h-full flex-col rounded-lg border border-slate-200 bg-white p-5 shadow-sm " + className
       }
     >
       {title ? (
@@ -93,7 +93,7 @@ function Card({
           ) : null}
         </div>
       ) : null}
-      {children}
+      <div className="flex flex-1 flex-col">{children}</div>
     </div>
   );
 }
@@ -110,16 +110,16 @@ function KpiCard({
   accent?: string;
 }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
       <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
         {label}
       </p>
       <p className={`mt-2 text-3xl font-semibold tracking-tight ${accent}`}>
         {value}
       </p>
-      {subtitle ? (
-        <p className="mt-1 text-xs text-slate-500">{subtitle}</p>
-      ) : null}
+      <p className="mt-auto pt-1 text-xs text-slate-500">
+        {subtitle ?? " "}
+      </p>
     </div>
   );
 }
@@ -526,13 +526,17 @@ export default function Dashboard() {
 
       {/* Gender + Age (stacked into 5-col area) */}
       <div className="md:col-span-1 lg:col-span-5">
-        <div className="grid grid-cols-1 gap-4">
-          <Card title="Gender split">
-            <GenderBars gender={data.gender ?? {}} />
-          </Card>
-          <Card title="Age band">
-            <AgeBars ageBand={data.age_band ?? {}} />
-          </Card>
+        <div className="flex h-full flex-col gap-4">
+          <div className="flex-1">
+            <Card title="Gender split">
+              <GenderBars gender={data.gender ?? {}} />
+            </Card>
+          </div>
+          <div className="flex-1">
+            <Card title="Age band">
+              <AgeBars ageBand={data.age_band ?? {}} />
+            </Card>
+          </div>
         </div>
       </div>
 
