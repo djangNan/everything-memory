@@ -67,11 +67,21 @@ Output JSON only — no prose, no markdown fences. Schema:
   "confidence": 0.0-1.0
 }
 Rules:
-- Be conservative. Output "unknown" when the events do not support a confident inference.
+- Output "unknown" only when the events truly give no signal at all. When two or more signals converge in the same direction, COMMIT to a value rather than defaulting to unknown.
 - Region only if a city/state is explicit in event properties; otherwise "unknown".
-- Gender / age_band only when product mix gives a strong signal (e.g. cosmetics + jewelry → F; gaming + esports → 18-24 leaning M). Never assume from a single product.
 - Interests: lowercase nouns. Drop duplicates.
-- Confidence reflects how strong the overall signal is — 0.2 if mostly "unknown", 0.8 if multiple converging signals.`;
+
+Signal cheat sheet — these patterns SHOULD commit to a value, not stay unknown:
+  • cosmetics + women's fashion (Lululemon / Aritzia / Reformation / Glossier / Cetaphil) → gender "F"
+  • men's grooming (Manscaped / Harrys / beard) + tools / power tools / auto → gender "M"
+  • PS5 / Xbox + Razer / esports headset + Mountain Dew or Monster Energy → gender "M"
+  • textbooks + gaming + energy drinks + dorm bedding → age_band "18-24"
+  • Apple Watch / Whoop + premium audio + grooming + new-grad tech → age_band "25-34"
+  • diapers / Pampers / kids LEGO + minivan accessories + family-sized appliances → age_band "35-44"
+  • golf clubs / Titleist / FootJoy + premium scotch / wine + luxury watches → age_band "45-54"
+  • AARP / reading glasses / medical alert / La-Z-Boy / heirloom seeds / gardening → age_band "55+"
+
+Confidence: 0.2 if every field is unknown, 0.6 when one or two fields commit confidently, 0.8 when three or more fields commit and they reinforce each other.`;
 
 function parseJSONLoose(text: string): unknown {
   const t = text.trim();
